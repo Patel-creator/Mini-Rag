@@ -44,6 +44,7 @@ rag-assistant/
 ├── rag.py                   # CLI-based RAG pipeline
 ├── app.py                   # Streamlit Chat Interface Frontend
 ├── evaluation.py            # Automated multi-question model evaluator
+├── evaluation_results.md    # Saved output from evaluation comparisons
 └── README.md
 ```
 
@@ -81,7 +82,7 @@ Then open `http://localhost:8501` in your browser.
 
 ### 2. Model Evaluation Suite
 
-Run the automated evaluation pipeline to compare HuggingFace and Ollama responses side-by-side using predefined questions:
+Run the automated evaluation pipeline to compare HuggingFace and Ollama responses side-by-side using predefined questions. The results are automatically saved to `evaluation_results.md`:
 
 ```bash
 python evaluation.py
