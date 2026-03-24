@@ -124,4 +124,4 @@ MIT
 ## Contact
 
 [Priyanshu Patel]
-[EMAIL_ADDRESS]
+[Patelpriyanshu77777@gmail.com]
