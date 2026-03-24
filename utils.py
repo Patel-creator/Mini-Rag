@@ -1,4 +1,5 @@
 import os
+import PyPDF2
 
 def load_documents(folder_path="data"):
     texts = []
@@ -11,6 +12,20 @@ def load_documents(folder_path="data"):
         if file.endswith(".txt") or file.endswith(".md"):
             with open(path, "r", encoding="utf-8") as f:
                 texts.append(f.read())
+        # pdf
+        elif file.endswith(".pdf"):
+            try:
+                with open(path, "rb") as f:
+                    reader = PyPDF2.PdfReader(f)
+                    text = ""
+                    for page in reader.pages:
+                        extracted = page.extract_text()
+                        if extracted:
+                            text += extracted + "\n"
+                    if text.strip():
+                        texts.append(text)
+            except Exception as e:
+                print(f"Error reading {file}: {e}")
 
     return texts
 

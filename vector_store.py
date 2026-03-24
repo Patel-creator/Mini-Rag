@@ -23,6 +23,7 @@ class VectorStore:
         results = []
 
         for i in I[0]:
-            results.append(self.texts[i])
+            if i != -1 and i < len(self.texts):
+                results.append(self.texts[i])
 
         return results

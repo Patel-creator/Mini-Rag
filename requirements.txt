@@ -4,3 +4,4 @@ streamlit
 numpy
 transformers
 torch
+PyPDF2

@@ -52,7 +52,7 @@ rag-assistant/
 pip install streamlit sentence-transformers faiss-cpu
 ```
 
-2. **Add PDF documents** to the `data/` folder.
+2. **Add documents** to the `data/` folder.
 
 ---
 
