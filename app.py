@@ -4,10 +4,11 @@ from utils import load_documents, chunk_text
 from embed import embed_texts, embed_query
 from vector_store import VectorStore
 from llm import generate_answer
+# from ollama_llm import generate_answer_ollama
 
 
 st.title("Mini RAG Assistant")
-
+k = st.slider("Top-K chunks", 1, 5, 3)
 
 @st.cache_resource
 def setup_rag():
@@ -25,29 +26,56 @@ def setup_rag():
 
     store.add(embeddings, chunks)
 
-    return store, chunks
+    return store
 
 
-store, chunks = setup_rag()
+store = setup_rag()
 
 
-query = st.text_input("Ask a question")
+if "messages" not in st.session_state:
+    st.session_state.messages = []
 
 
-if query:
+for msg in st.session_state.messages:
 
-    q_emb = embed_query(query)
+    if msg["role"] == "user":
 
-    results = store.search(q_emb, k=3)
+        st.chat_message("user").write(msg["content"])
 
-    context = "\n\n".join(results)
+    else:
 
-    st.subheader("Retrieved Context")
+        st.chat_message("assistant").write(msg["content"])
 
-    st.write(context)
+        with st.expander("Retrieved Context"):
+            st.write(msg["context"])
 
-    answer = generate_answer(context, query)
 
-    st.subheader("Final Answer")
+if query := st.chat_input("Ask something"):
 
-    st.write(answer)
+    st.session_state.messages.append(
+        {"role": "user", "content": query}
+    )
+    
+    st.chat_message("user").write(query)
+
+    with st.chat_message("assistant"):
+        with st.spinner("Thinking..."):
+            q_emb = embed_query(query)
+        
+            results = store.search(q_emb, k=k)
+        
+            context = "\n\n".join(results)
+        
+            answer = generate_answer(context, query)
+            
+            st.write(answer)
+            with st.expander("Retrieved Context"):
+                st.write(context)
+
+    st.session_state.messages.append(
+        {
+            "role": "assistant",
+            "content": answer,
+            "context": context,
+        }
+    )
